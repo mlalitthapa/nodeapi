@@ -28,6 +28,15 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
+const hasFile = (req, res, next) => {
+  if(!req.file) {
+    return res.status(422).json({
+      error: 'Please select image file for product.'
+    })
+  }
+  next();
+};
+
 router.get('/', (req, res, next) => {
   Product.find()
     .select('_id name price image')
@@ -55,7 +64,7 @@ router.get('/', (req, res, next) => {
     }));
 });
 
-router.post('/', upload.single('image'), (req, res, next) => {
+router.post('/', upload.single('image'), hasFile, (req, res, next) => {
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,

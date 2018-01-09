@@ -3,3 +3,9 @@ exports.serverError = (res, error) => {
     error: error
   });
 };
+
+exports.unauthorized = res => {
+  return res.status(401).json({
+    error: 'Authorization failed.'
+  });
+};

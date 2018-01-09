@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const Order = require('../models/order');
 const Product = require('../models/product');
+const authenticate = require('../middleware/authenticate');
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get('/', (req, res, next) => {
     }));
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authenticate, (req, res, next) => {
 
   Product.findById(req.body.productId)
     .then(product => {
@@ -89,7 +90,7 @@ router.get('/:id', (req, res) => {
     })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authenticate, (req, res) => {
   Order.remove({
     _id: req.params.id
   })
